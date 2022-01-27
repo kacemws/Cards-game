@@ -8,12 +8,14 @@ import {
 import { useAtom } from "jotai";
 import { userAtom } from "./data";
 import { verifyCookie } from "./services";
-import { Layout, Home, Quizzes, NotFound } from "./pages";
+import { Layout, Home, Quizzes, Users, NotFound } from "./pages";
+import { setAuthToken } from "./api";
+import { Loader } from "./Components";
 function App() {
   /*Token*/
   const [token, setToken] = useState(localStorage.getItem("accessToken") ?? ""); // the actual token;
   /*Token*/
-  const [, setFetchingToken] = useState(true);
+  const [fetchingToken, setFetchingToken] = useState(true);
 
   const [user] = useAtom(userAtom);
   const [roles, setRoles] = useState([]);
@@ -29,95 +31,105 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (![null, undefined, ""].includes(token)) {
+    setAuthToken(token);
+  }
+
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          {/* home page, landing for non auth users and normal user, games for admins */}
-          <Route
-            path="/"
-            element={
-              ![null, undefined, "", "no token"].includes(token) &&
-              roles.includes("ADMIN") ? (
-                <Quizzes />
-              ) : (
-                <Home />
-              )
-            }
-          />
+    <>
+      {fetchingToken ? (
+        <Loader />
+      ) : (
+        <Router>
+          <Layout>
+            <Routes>
+              {/* home page, landing for non auth users and normal user, games for admins */}
+              <Route
+                path="/"
+                element={
+                  ![null, undefined, "", "no token"].includes(token) &&
+                  roles.includes("ADMIN") ? (
+                    <Quizzes />
+                  ) : (
+                    <Home />
+                  )
+                }
+              />
 
-          {/* profile for logged in people */}
-          <Route
-            path="/profile"
-            element={
-              ![null, undefined, "", "no token"].includes(token) ? (
-                <Quizzes />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
+              {/* profile for logged in people */}
+              <Route
+                path="/profile"
+                element={
+                  ![null, undefined, "", "no token"].includes(token) ? (
+                    <Quizzes />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
 
-          {/* manage users for the admins */}
+              {/* manage users for the admins */}
 
-          <Route
-            path="/users/all"
-            element={
-              ![null, undefined, "", "no token"].includes(token) &&
-              roles.includes("ADMIN") ? (
-                <Quizzes />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
+              <Route
+                path="/users/all"
+                element={
+                  ![null, undefined, "", "no token"].includes(token) &&
+                  roles.includes("ADMIN") ? (
+                    <Users />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
 
-          {/* games for people who are users */}
+              {/* games for people who are users */}
 
-          <Route
-            path="/games/all"
-            element={
-              ![null, undefined, "", "no token"].includes(token) &&
-              roles.includes("USER") ? (
-                <Quizzes />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
+              <Route
+                path="/games/all"
+                element={
+                  ![null, undefined, "", "no token"].includes(token) &&
+                  roles.includes("USER") ? (
+                    <Quizzes />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
 
-          {/* game rules for people who are users */}
+              {/* game rules for people who are users */}
 
-          <Route
-            path="/games/all/:id"
-            element={
-              ![null, undefined, "", "no token"].includes(token) &&
-              roles.includes("USER") ? (
-                <Quizzes />
-              ) : (
-                <Navigate to="/games/all" />
-              )
-            }
-          />
+              <Route
+                path="/games/all/:id"
+                element={
+                  ![null, undefined, "", "no token"].includes(token) &&
+                  roles.includes("USER") ? (
+                    <Quizzes />
+                  ) : (
+                    <Navigate to="/games/all" />
+                  )
+                }
+              />
 
-          {/* game room for people who are users */}
+              {/* game room for people who are users */}
 
-          <Route
-            path="/games/all/:id/play/:id"
-            element={
-              ![null, undefined, "", "no token"].includes(token) &&
-              roles.includes("USER") ? (
-                <Quizzes />
-              ) : (
-                <Navigate to="/games/all" />
-              )
-            }
-          />
+              <Route
+                path="/games/all/:id/play/:id"
+                element={
+                  ![null, undefined, "", "no token"].includes(token) &&
+                  roles.includes("USER") ? (
+                    <Quizzes />
+                  ) : (
+                    <Navigate to="/games/all" />
+                  )
+                }
+              />
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>
-    </Router>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </Router>
+      )}
+    </>
   );
 }
 
