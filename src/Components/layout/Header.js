@@ -38,6 +38,14 @@ const StockHeader = ({ ...props }) => {
     };
   }, []);
 
+  const [loggedIn, setLoggedIn] = useState(false);
+  const token = localStorage.getItem("accessToken");
+  useEffect(() => {
+    if (![null, undefined, ""].includes(token)) {
+      setLoggedIn(true);
+    } else setLoggedIn(false);
+  }, [token]);
+
   return (
     <>
       <header className={`${position} ${size} ${items} ${bg} ${glass} `}>
@@ -52,16 +60,18 @@ const StockHeader = ({ ...props }) => {
           <div className="mx-1" />
           <Title>LETSCARD</Title>
         </div>
-        <div className="flex items-center">
-          <PrimaryButton
-            title="Sign in"
-            onClick={(_) => {}}
-            style={{
-              margin: "0 1rem",
-            }}
-          />
-          <PrimaryButton title="Start Playing now" onClick={(_) => {}} />
-        </div>
+        {!loggedIn && (
+          <div className="flex items-center">
+            <PrimaryButton
+              title="Sign in"
+              onClick={(_) => {}}
+              style={{
+                margin: "0 1rem",
+              }}
+            />
+            <PrimaryButton title="Start Playing now" onClick={(_) => {}} />
+          </div>
+        )}
       </header>
       {/* <AddQuizModal open={open} setOpen={setIsOpen} /> */}
     </>
