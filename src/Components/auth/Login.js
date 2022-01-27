@@ -40,9 +40,9 @@ const LoginInner = ({ setOpen, setLoading, loading }) => {
             ? errors?.email?.message
               ? errors?.email?.message
               : errors?.email?.type === "required"
-              ? "obligatoire"
+              ? "Required"
               : errors?.email?.type === "pattern"
-              ? "Consignes non respectées"
+              ? "Invalid format"
               : ""
             : ""
         }
@@ -51,18 +51,18 @@ const LoginInner = ({ setOpen, setLoading, loading }) => {
         required
       />
       <Input
-        label="Mot de passe"
+        label="Password"
         password
         name="password"
         type="password"
-        error={errors?.password?.type === "required" ? "obligatoire" : ""}
+        error={errors?.password?.type === "required" ? "Required" : ""}
         register={register}
         minLength={6}
         required
       />
       <div className="w-full flex justify-end">
         <OutlinedButton
-          title="Se connecter"
+          title="Login"
           type="primary"
           disabled={loading}
           loading={loading}
@@ -80,7 +80,7 @@ export const Login = ({ open, setOpen }) => {
       setIsOpen={(_) => {
         setOpen(!open);
       }}
-      title="Se connecter"
+      title="Login"
       disabled={loading}
       key="add-quiz-modal"
       maxWidth="50%"

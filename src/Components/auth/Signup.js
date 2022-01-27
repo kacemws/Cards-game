@@ -50,9 +50,9 @@ const SignupInner = ({ setOpen, setLoading, loading }) => {
             ? errors?.email?.message
               ? errors?.email?.message
               : errors?.email?.type === "required"
-              ? "obligatoire"
+              ? "Required"
               : errors?.email?.type === "pattern"
-              ? "Consignes non respectées"
+              ? "Invalid format"
               : ""
             : ""
         }
@@ -97,11 +97,11 @@ const SignupInner = ({ setOpen, setLoading, loading }) => {
         type="password"
         error={
           errors?.password?.type === "required"
-            ? "obligatoire"
+            ? "Required"
             : errors?.password?.type === "minLength"
-            ? "Taille non respéctée"
+            ? "Minimum not reached"
             : errors?.password?.type === "pattern"
-            ? "Consignes non respectées"
+            ? "Directives not respected"
             : ""
         }
         register={register}
