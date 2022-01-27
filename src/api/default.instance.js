@@ -57,7 +57,7 @@ export const setAuthToken = (token) => {
 
 export const refreshExpiredToken = (refreshToken) => {
   return axios
-    .post("/api/auth/refreshToken", {
+    .post("/auth/refreshToken", {
       refreshToken,
     })
     .then((responses) => {
