@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Login, PrimaryButton, Title } from "..";
+import { Login, PrimaryButton, Signup, Title } from "..";
 import logo from "../../assets/images/logo.png";
 const StockHeader = ({ ...props }) => {
   const position = "sticky top-0 z-50";
@@ -9,7 +9,8 @@ const StockHeader = ({ ...props }) => {
   const bg = "bg-neutral-200";
   const [glass, setGlass] = useState("");
 
-  const [open, setIsOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [signupOpen, setSignupOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -61,17 +62,23 @@ const StockHeader = ({ ...props }) => {
             <PrimaryButton
               title="Sign in"
               onClick={(_) => {
-                setIsOpen(true);
+                setLoginOpen(true);
               }}
               style={{
                 margin: "0 1rem",
               }}
             />
-            <PrimaryButton title="Start Playing now" onClick={(_) => {}} />
+            <PrimaryButton
+              title="Start Playing now"
+              onClick={(_) => {
+                setSignupOpen(true);
+              }}
+            />
           </div>
         )}
       </header>
-      <Login open={open} setOpen={setIsOpen} />
+      <Login open={loginOpen} setOpen={setLoginOpen} />
+      <Signup open={signupOpen} setOpen={setSignupOpen} />
     </>
   );
 };

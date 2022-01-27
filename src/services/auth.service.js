@@ -1,4 +1,4 @@
-import { setAuthToken, postLogin } from "../api/";
+import { setAuthToken, postLogin, postUser } from "../api/";
 
 export const signin = async (data) => {
   const mydata = {
@@ -21,6 +21,35 @@ export const signin = async (data) => {
     } else if (res === "network error") {
       throw Error("Pas de connexion a internet");
     } else {
+    }
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const signup = async (data) => {
+  const mydata = {
+    email: data.email,
+    password: data.password,
+    first_name: data.first_name,
+    gender: {
+      name: data.gender.name,
+    },
+    last_name: data?.last_name,
+    role: data?.role,
+  };
+
+  try {
+    const res = await postUser(mydata);
+    if (res?.status === 400) {
+      throw Error("Email already exists");
+    } else if (res?.status === 201) {
+      const mydata = {
+        email: res?.data?.email,
+        password: data?.password,
+      };
+      await signin(mydata);
+      return;
     }
   } catch (err) {
     throw err;
