@@ -1,7 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Login, PrimaryButton, Signup, Title } from "..";
+import { useAtom } from "jotai";
+import { userAtom } from "../../data";
+import { Heading, Login, PrimaryButton, Signup, Title } from "..";
+import { UserIcon } from "@heroicons/react/outline";
 import logo from "../../assets/images/logo.png";
+
+const Item = ({ title, path }) => {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      className="mx-2 cursor-pointer"
+      onClick={() => {
+        navigate(path);
+      }}
+    >
+      <Heading color="text-primary-500">{title}</Heading>
+    </div>
+  );
+};
+
 const StockHeader = ({ ...props }) => {
   const position = "sticky top-0 z-50";
   const size = "w-100 h-20 min-h-[5rem] px-4";
@@ -36,12 +55,26 @@ const StockHeader = ({ ...props }) => {
   }, []);
 
   const [loggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useAtom(userAtom);
+  const [roles, setRoles] = useState([]);
   const token = localStorage.getItem("accessToken");
+
   useEffect(() => {
     if (![null, undefined, ""].includes(token)) {
       setLoggedIn(true);
     } else setLoggedIn(false);
   }, [token]);
+
+  useEffect(() => {
+    setRoles(user?.roles?.map(({ name }) => name) ?? []);
+  }, [user]);
+
+  const logout = async () => {
+    navigate("/");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setUser({});
+  };
 
   return (
     <>
@@ -57,25 +90,43 @@ const StockHeader = ({ ...props }) => {
           <div className="mx-1" />
           <Title>LETSCARD</Title>
         </div>
-        {!loggedIn && (
-          <div className="flex items-center">
-            <PrimaryButton
-              title="Sign in"
-              onClick={(_) => {
-                setLoginOpen(true);
-              }}
-              style={{
-                margin: "0 1rem",
-              }}
-            />
-            <PrimaryButton
-              title="Start Playing now"
-              onClick={(_) => {
-                setSignupOpen(true);
+        <div className="flex items-center">
+          {roles.includes("ADMIN") && (
+            <>
+              <Item title="Games" path="/" />
+              <Item title="Users" path="/users/all" />
+            </>
+          )}
+          {Object.keys(user).length !== 0 && (
+            <UserIcon
+              className="h-8 w-8 text-primary-500 mx-4 cursor-pointer"
+              onClick={() => {
+                navigate("/profile");
               }}
             />
-          </div>
-        )}
+          )}
+          {loggedIn ? (
+            <PrimaryButton title="Sign out" onClick={logout} />
+          ) : (
+            <>
+              <PrimaryButton
+                title="Sign in"
+                onClick={(_) => {
+                  setLoginOpen(true);
+                }}
+                style={{
+                  margin: "0 1rem",
+                }}
+              />
+              <PrimaryButton
+                title="Start Playing now"
+                onClick={(_) => {
+                  setSignupOpen(true);
+                }}
+              />
+            </>
+          )}
+        </div>
       </header>
       <Login open={loginOpen} setOpen={setLoginOpen} />
       <Signup open={signupOpen} setOpen={setSignupOpen} />

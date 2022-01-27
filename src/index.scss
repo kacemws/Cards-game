@@ -6,16 +6,17 @@
 * {
   box-sizing: border-box !important;
   // color: var(--text-inverted) !important;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
   -moz-appearance: none;
   -webkit-appearance: none;
   -o-appearance: none;
+}
+*:not(input.field) {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 html,

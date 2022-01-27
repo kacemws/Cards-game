@@ -1,4 +1,4 @@
-import { setAuthToken, postLogin, postUser } from "../api/";
+import { setAuthToken, postLogin, postUser, getUser } from "../api/";
 
 export const signin = async (data) => {
   const mydata = {
@@ -14,7 +14,7 @@ export const signin = async (data) => {
         const token = res.data.token;
         setAuthToken(token);
         localStorage.setItem("accessToken", token);
-        return token;
+        return await fetchUser();
       } else if ([401, 404].includes(res.status)) {
         throw Error("email/mot de passe introuvable");
       }
@@ -48,9 +48,16 @@ export const signup = async (data) => {
         email: res?.data?.email,
         password: data?.password,
       };
-      await signin(mydata);
-      return;
+      return await signin(mydata);
     }
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const fetchUser = async () => {
+  try {
+    return await getUser();
   } catch (err) {
     throw err;
   }

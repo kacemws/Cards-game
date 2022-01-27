@@ -13,11 +13,11 @@ export const verifyCookie = (
   localSetToken = setToken;
 
   if (
-    cookieToken === undefined &&
+    [null, undefined, ""].includes(cookieToken) &&
     refreshToken !== undefined &&
     (refreshToken?.length ?? []) > 0
   ) {
-    refreshExpiredToken({ refreshToken })
+    refreshExpiredToken(refreshToken)
       .then((res) => {
         if (res?.status === 400) throw Error("no token");
 

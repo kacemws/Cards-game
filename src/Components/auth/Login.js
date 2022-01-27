@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Input, Modal, OutlinedButton } from "..";
+import { useAtom } from "jotai";
 import { signin } from "../../services";
+import { userAtom } from "../../data";
+import { Input, Modal, OutlinedButton } from "..";
 
 const LoginInner = ({ setOpen, setLoading, loading }) => {
+  const [, setUser] = useAtom(userAtom);
   const {
     register,
     handleSubmit,
@@ -20,7 +23,11 @@ const LoginInner = ({ setOpen, setLoading, loading }) => {
           setLoading(true);
           const aux = { ...formData };
           console.log({ aux });
-          await signin(aux);
+          const { data } = await signin(aux);
+          if (data?.banned) {
+            throw Error("You have been banned");
+          }
+          setUser(data);
           setOpen(false);
           setLoading(false);
         } catch (error) {

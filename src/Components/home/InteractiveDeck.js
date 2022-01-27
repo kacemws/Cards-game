@@ -41,9 +41,8 @@ export const InteractiveDeck = ({ x = 0, y = 0 }) => {
       {cards.map((card, index) => {
         const canDrag = index === 0;
         return (
-          <AnimatePresence>
+          <AnimatePresence key={card}>
             <motion.div
-              key={card}
               className="shadow absolute rounded-lg border border-gray-300"
               style={{
                 ...cardStyle,

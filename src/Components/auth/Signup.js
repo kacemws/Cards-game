@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Input, Modal, OutlinedButton, Select } from "..";
+import { useAtom } from "jotai";
 import { signup } from "../../services";
+import { userAtom } from "../../data";
+import { Input, Modal, OutlinedButton, Select } from "..";
 
 const SignupInner = ({ setOpen, setLoading, loading }) => {
+  const [, setUser] = useAtom(userAtom);
   const [gender, setGender] = useState({
     label: "MALE",
     value: "MALE",
@@ -30,7 +33,9 @@ const SignupInner = ({ setOpen, setLoading, loading }) => {
             role: ["USER"],
           };
           console.log({ aux });
-          await signup(aux);
+
+          const { data } = await signup(aux);
+          setUser(data);
           setOpen(false);
           setLoading(false);
         } catch (error) {
