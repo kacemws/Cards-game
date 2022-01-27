@@ -10,7 +10,7 @@ export const getUser = async () => {
 
 export const getUsers = async (page = 0, size = 10) => {
   try {
-    return await axios.get(`/users/all/?page=${page}&size=${size}`);
+    return await axios.get(`/users/all/?pageNumber=${page}&pageSize=${size}`);
   } catch (error) {
     throw new Error(error?.response?.data);
   }

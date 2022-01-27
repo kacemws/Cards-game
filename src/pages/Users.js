@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import {
   Loader,
   NoContent,
-  OutlinedButton,
   Table,
   TertiaryButton,
   AddUser,
+  Pagination,
 } from "../Components";
 import { exportCsv, getAllUsers, manageBan, totalPages } from "../services";
 import { DocumentDownloadIcon, UserAddIcon } from "@heroicons/react/outline";
@@ -31,10 +31,10 @@ export const Users = ({ ...props }) => {
 
   const paginate = async (page) => {
     setInnerLoading(true);
-    const { users, count } = await getAllUsers(page, 10);
+    const { users, count } = await getAllUsers(page - 1, 10);
     setUsers(users);
     setCount(count);
-    setPage(page);
+    setPage(page - 1);
     setInnerLoading(false);
   };
 
@@ -165,16 +165,11 @@ export const Users = ({ ...props }) => {
                 />
               </div>
               <div className="mt-4 mb-2">
-                {page !== totalPages(10, count) && (
-                  <OutlinedButton
-                    title="Afficher plus"
-                    disabled={innerLoading || loading}
-                    loading={innerLoading || loading}
-                    onClick={(_) => {
-                      paginate();
-                    }}
-                  />
-                )}
+                <Pagination
+                  currentPage={page + 1}
+                  pageNumbers={totalPages(10, count)}
+                  setCurrentPage={paginate}
+                />
               </div>
             </div>
           )}
