@@ -31,11 +31,11 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
       return refreshExpiredToken(refreshToken).then((res) => {
         if (res.status === 200) {
-          localStorage.setItem("accessToken", res.data.token);
+          localStorage.setItem("accessToken", res.data.accessToken);
           localStorage.setItem("refreshToken", res.data.refreshToken);
 
           axios.defaults.headers.common["Authorization"] =
-            "Bearer " + res.data.token;
+            "Bearer " + res.data.accessToken;
 
           return axios(originalRequest);
         }

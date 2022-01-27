@@ -1,4 +1,4 @@
 // export * from "./UpdateQuiz";
 // export * from "./DeleteQuiz";
-export * from "./QuizCard";
+export * from "./GameCard";
 // export * from "./Recap";

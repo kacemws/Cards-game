@@ -8,7 +8,7 @@ import {
 import { useAtom } from "jotai";
 import { userAtom } from "./data";
 import { verifyCookie } from "./services";
-import { Layout, Home, Quizzes, Users, NotFound } from "./pages";
+import { Layout, Home, Games, Users, NotFound } from "./pages";
 import { setAuthToken } from "./api";
 import { Loader } from "./Components";
 function App() {
@@ -49,7 +49,7 @@ function App() {
                 element={
                   ![null, undefined, "", "no token"].includes(token) &&
                   roles.includes("ADMIN") ? (
-                    <Quizzes />
+                    <Games />
                   ) : (
                     <Home />
                   )
@@ -61,7 +61,7 @@ function App() {
                 path="/profile"
                 element={
                   ![null, undefined, "", "no token"].includes(token) ? (
-                    <Quizzes />
+                    <Games />
                   ) : (
                     <Navigate to="/" />
                   )
@@ -89,7 +89,7 @@ function App() {
                 element={
                   ![null, undefined, "", "no token"].includes(token) &&
                   roles.includes("USER") ? (
-                    <Quizzes />
+                    <Games />
                   ) : (
                     <Navigate to="/" />
                   )
@@ -103,7 +103,7 @@ function App() {
                 element={
                   ![null, undefined, "", "no token"].includes(token) &&
                   roles.includes("USER") ? (
-                    <Quizzes />
+                    <Games />
                   ) : (
                     <Navigate to="/games/all" />
                   )
@@ -117,7 +117,7 @@ function App() {
                 element={
                   ![null, undefined, "", "no token"].includes(token) &&
                   roles.includes("USER") ? (
-                    <Quizzes />
+                    <Games />
                   ) : (
                     <Navigate to="/games/all" />
                   )

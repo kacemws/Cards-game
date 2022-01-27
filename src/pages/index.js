@@ -1,5 +1,5 @@
 export { Layout } from "./Layout";
 export { Home } from "./Home";
 export { NotFound } from "./NotFound";
-export { Quizzes } from "./Quizzes";
+export { Games } from "./Games";
 export * from "./Users";
