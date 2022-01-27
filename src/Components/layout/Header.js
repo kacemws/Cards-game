@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  //  AddQuizModal,
-  PrimaryButton,
-  Title,
-} from "..";
+import { Login, PrimaryButton, Title } from "..";
 import logo from "../../assets/images/logo.png";
 const StockHeader = ({ ...props }) => {
   const position = "sticky top-0 z-50";
@@ -13,7 +9,7 @@ const StockHeader = ({ ...props }) => {
   const bg = "bg-neutral-200";
   const [glass, setGlass] = useState("");
 
-  // const [open, setIsOpen] = useState(false);
+  const [open, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -64,7 +60,9 @@ const StockHeader = ({ ...props }) => {
           <div className="flex items-center">
             <PrimaryButton
               title="Sign in"
-              onClick={(_) => {}}
+              onClick={(_) => {
+                setIsOpen(true);
+              }}
               style={{
                 margin: "0 1rem",
               }}
@@ -73,7 +71,7 @@ const StockHeader = ({ ...props }) => {
           </div>
         )}
       </header>
-      {/* <AddQuizModal open={open} setOpen={setIsOpen} /> */}
+      <Login open={open} setOpen={setIsOpen} />
     </>
   );
 };

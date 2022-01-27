@@ -21,11 +21,11 @@ export const verifyCookie = (
       .then((res) => {
         if (res?.status === 400) throw Error("no token");
 
-        localStorage.setItem("accessToken", res.data.accessToken);
+        localStorage.setItem("accessToken", res.data.token);
         localStorage.setItem("refreshToken", res.data.refreshToken);
 
-        setAuthToken(res.data.accessToken);
-        setToken(res.data.accessToken);
+        setAuthToken(res.data.token);
+        setToken(res.data.token);
         setFetchingToken(false);
         window.setInterval(checkCookie, 100); // setting an interval each 100ms (0.1 seconds) to execute the check cookie function ( check line 58)
         return;

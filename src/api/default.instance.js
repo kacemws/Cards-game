@@ -20,6 +20,10 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
     let refreshToken = localStorage.getItem("refreshToken");
 
+    if (originalRequest.url === "/auth/signin") {
+      throw error;
+    }
+
     if (
       [403, 401].includes(error.response?.status) &&
       !originalRequest._retry
@@ -27,11 +31,11 @@ instance.interceptors.response.use(
       originalRequest._retry = true;
       return refreshExpiredToken(refreshToken).then((res) => {
         if (res.status === 200) {
-          localStorage.setItem("accessToken", res.data.accessToken);
+          localStorage.setItem("accessToken", res.data.token);
           localStorage.setItem("refreshToken", res.data.refreshToken);
 
           axios.defaults.headers.common["Authorization"] =
-            "Bearer " + res.data.accessToken;
+            "Bearer " + res.data.token;
 
           return axios(originalRequest);
         }
