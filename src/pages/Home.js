@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAtom } from "jotai";
-import { statesAtom, typesAtom, difficultiesAtom, quizzesAtom } from "../data";
-import { getStatuses, getTypes, getDifficulties } from "../api";
 import {
-  AddQuizModal,
   HomeDescription,
   HomeImage,
   Loader,
   OutlinedButton,
   PageTitle,
-  QuizSample,
 } from "../Components";
 import ready from "../assets/images/illustrations/ready.png";
 import topOfBooks from "../assets/images/illustrations/top-of-books.png";
@@ -19,50 +14,13 @@ import topStripe from "../assets/images/shapes/centred-shape.svg";
 import bottomStripes from "../assets/images/shapes/bottom-stripes.svg";
 import circle from "../assets/images/shapes/half-circle.svg";
 import bottom from "../assets/images/shapes/bottom.svg";
-import { getPaginatedPublishedQuizzes } from "../services";
 
 export const Home = ({ ...props }) => {
   const navigate = useNavigate();
-  const [, setStates] = useAtom(statesAtom);
-  const [, setTypes] = useAtom(typesAtom);
-  const [, setDifficulties] = useAtom(difficultiesAtom);
-  const [quizzes, setQuizzes] = useAtom(quizzesAtom);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
-
   useEffect(() => {
-    getStatuses().then(({ data }) => {
-      const states = Object.keys(data).map((label) => {
-        return {
-          label,
-          value: data[label],
-        };
-      });
-      getTypes().then(({ data }) => {
-        const types = Object.keys(data).map((label) => {
-          return {
-            label,
-            value: data[label],
-          };
-        });
-        getDifficulties().then(({ data }) => {
-          const difficulties = Object.keys(data).map((label) => {
-            return {
-              label,
-              value: data[label],
-            };
-          });
-          getPaginatedPublishedQuizzes(1, 10).then((resp) => {
-            setQuizzes(resp);
-            setStates(states);
-            setTypes(types);
-            setDifficulties(difficulties);
-            setLoading(false);
-          });
-        });
-      });
-    });
-  }, [setStates, setTypes, setDifficulties, setQuizzes]);
+    setLoading(false);
+  }, []);
   return (
     <>
       {loading ? (
@@ -72,14 +30,14 @@ export const Home = ({ ...props }) => {
           <section className="flex flex-col md:flex-row justify-between items-center my-4">
             <img src={topStripe} className="absolute -right-0" alt="stripe" />
             <HomeDescription
-              title="Les quizs n'ont jamais était si fun !"
-              description="Défiez vos ami(e)s, entrenez vous, vous décidez ! DOTNET vous offre la possibilité de jouer à des quizs fais par notre communauté, ou même les votres !"
-              buttonContent="Commencer dès maintenant !"
+              title="Playing Cards was never this easy !"
+              description="Multiple free and enjoyable games at the tips of your hand, what are you waiting for ?"
+              buttonContent="Start Playing Now !"
               x={-200}
             />
             <HomeImage
               img={ready}
-              title="Les quizs n'ont jamais était si fun !"
+              title="Playing Cards was never this easy !"
               x={200}
             />
           </section>
@@ -89,18 +47,14 @@ export const Home = ({ ...props }) => {
             <img src={circle} className="absolute right-0" alt="stripe" />
             <HomeImage
               img={topOfBooks}
-              title="Les quizs n'ont jamais était si fun !"
+              title="Best in-game simulation"
               x={-200}
             />
             <HomeDescription
-              title="Mettez vos amis à l'épreuve !"
+              title="Never felt this real !"
               description={
-                "DOTQUIZ vous offre la possibilité de créer vos propre quizs ! Mettez vos amis à l'épreuve que sa soit dans de la culture générale Ou sur votre relation !"
+                "We offer you the possibility the play the games like they were in real life ! A simulation game never felt this real !"
               }
-              buttonContent="Créer un quiz"
-              buttonClick={(_) => {
-                setOpen(true);
-              }}
               x={200}
             />
           </section>
@@ -109,27 +63,25 @@ export const Home = ({ ...props }) => {
             <img src={bottom} className="absolute right-0" alt="stripe" />
             <HomeImage
               img={universe}
-              title="Les quizs n'ont jamais était si fun !"
+              title="What are you waiting for ?"
               y={100}
             />
             <PageTitle>
-              Plonger dans un monde rempli de nouveaux défis
+              What are you waiting for ? Jump in this new world !
             </PageTitle>
-            <QuizSample quizzes={quizzes.items} />
           </section>
           {/* ********* */}
           <div className="py-4 w-full flex items-center justify-center">
             <OutlinedButton
-              title="Découvrir plus"
+              title="Discover our games"
               onClick={(_) => {
-                navigate("/quizzes/all");
+                navigate("/games/all");
               }}
             />
           </div>
         </div>
       )}
       )
-      <AddQuizModal open={open} setOpen={setOpen} />
     </>
   );
 };
