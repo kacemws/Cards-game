@@ -7,13 +7,13 @@ import {
   OutlinedButton,
   PageTitle,
 } from "../Components";
-import ready from "../assets/images/illustrations/ready.png";
-import topOfBooks from "../assets/images/illustrations/top-of-books.png";
-import universe from "../assets/images/illustrations/universe.png";
+import ready from "../assets/images/illustrations/easySetup.png";
+import universe from "../assets/images/illustrations/discover.png";
 import topStripe from "../assets/images/shapes/centred-shape.svg";
 import bottomStripes from "../assets/images/shapes/bottom-stripes.svg";
 import circle from "../assets/images/shapes/half-circle.svg";
 import bottom from "../assets/images/shapes/bottom.svg";
+import { InteractiveDeck } from "../Components/home/InteractiveDeck";
 
 export const Home = ({ ...props }) => {
   const navigate = useNavigate();
@@ -42,14 +42,10 @@ export const Home = ({ ...props }) => {
             />
           </section>
           {/* ********* */}
-          <section className="flex flex-col md:flex-row justify-between items-center my-12">
+          <section className="flex flex-col-reverse md:flex-row justify-between items-center my-12">
             <img src={bottomStripes} className="absolute left-0" alt="stripe" />
             <img src={circle} className="absolute right-0" alt="stripe" />
-            <HomeImage
-              img={topOfBooks}
-              title="Best in-game simulation"
-              x={-200}
-            />
+            <InteractiveDeck />
             <HomeDescription
               title="Never felt this real !"
               description={

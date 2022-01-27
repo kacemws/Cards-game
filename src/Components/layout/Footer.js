@@ -70,7 +70,7 @@ const StockFooter = ({ ...props }) => {
       </div>
       <hr className="my-1 bg-black border-gray-300 h-[1px]" />
       <div className="w-100 h-12 flex items-center justify-center">
-        <Caption>© 2021 LETSCARD. All rights reserved</Caption>
+        <Caption>© 2022 LETSCARD. All rights reserved</Caption>
       </div>
     </footer>
   );
