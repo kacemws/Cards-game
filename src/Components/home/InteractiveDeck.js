@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const CARD_COLORS = [
   "https://numerologist.com/wp-content/uploads/2014/12/08-strength-1.jpg",
@@ -41,33 +41,39 @@ export const InteractiveDeck = ({ x = 0, y = 0 }) => {
       {cards.map((card, index) => {
         const canDrag = index === 0;
         return (
-          <motion.div
-            key={card}
-            className="shadow absolute rounded-lg border border-gray-300"
-            style={{
-              ...cardStyle,
-              backgroundImage: `url("${card}")`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "225px 320px",
-              cursor: canDrag ? "grab" : "auto",
-            }}
-            animate={{
-              zIndex: CARD_COLORS.length - index,
-              rotate: Math.floor(Math.random() * (5 + 5 + 1)) - 5,
-            }}
-            drag={canDrag}
-            dragConstraints={{
-              top: 0,
-              bottom: 0,
-            }}
-            whileDrag={{
-              scale: 1.15,
-              className: "shadow-none",
-              rotate: 0,
-            }}
-            dragElastic={0.5}
-            onDragEnd={() => moveToEnd(index)}
-          />
+          <AnimatePresence>
+            <motion.div
+              key={card}
+              className="shadow absolute rounded-lg border border-gray-300"
+              style={{
+                ...cardStyle,
+                backgroundImage: `url("${card}")`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "225px 320px",
+                cursor: canDrag ? "grab" : "auto",
+              }}
+              animate={{
+                zIndex: CARD_COLORS.length - index,
+                rotate: Math.floor(Math.random() * (5 + 5 + 1)) - 5,
+              }}
+              exit={{ opacity: 0, scale: 0.75 }}
+              drag={canDrag}
+              dragConstraints={{
+                top: 0,
+                bottom: 0,
+              }}
+              whileTap={{
+                rotate: 0,
+              }}
+              whileDrag={{
+                scale: 1.15,
+                className: "shadow-none",
+                rotate: 0,
+              }}
+              dragElastic={0.5}
+              onDragEnd={() => moveToEnd(index)}
+            />
+          </AnimatePresence>
         );
       })}
     </motion.div>
