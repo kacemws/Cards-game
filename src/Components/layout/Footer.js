@@ -1,6 +1,6 @@
 import React from "react";
 import { Title, Caption } from "..";
-import logo from "../../assets/images/logo.svg";
+import logo from "../../assets/images/logo.png";
 import fb from "../../assets/images/icons/fb.svg";
 import instagram from "../../assets/images/icons/instagram.svg";
 import twitter from "../../assets/images/icons/twitter.svg";
@@ -50,7 +50,7 @@ const StockFooter = ({ ...props }) => {
             className="h-8 w-8 md:h-10 md:w-10"
           />
           <div className="mx-1" />
-          <Title>DOTQUIZ</Title>
+          <Title>LETSCARD</Title>
         </div>
         <div className="flex items-center">
           {socials.map(({ icon, link }, index) => {
@@ -70,7 +70,7 @@ const StockFooter = ({ ...props }) => {
       </div>
       <hr className="my-1 bg-black border-gray-300 h-[1px]" />
       <div className="w-100 h-12 flex items-center justify-center">
-        <Caption>© 2021 DOTQUIZ. All rights reserved</Caption>
+        <Caption>© 2021 LETSCARD. All rights reserved</Caption>
       </div>
     </footer>
   );

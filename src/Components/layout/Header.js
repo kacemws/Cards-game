@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AddQuizModal, PrimaryButton, Title } from "..";
-import logo from "../../assets/images/logo.svg";
+import {
+  //  AddQuizModal,
+  PrimaryButton,
+  Title,
+} from "..";
+import logo from "../../assets/images/logo.png";
 const StockHeader = ({ ...props }) => {
   const position = "sticky top-0 z-50";
   const size = "w-100 h-20 min-h-[5rem] px-4";
@@ -9,7 +13,7 @@ const StockHeader = ({ ...props }) => {
   const bg = "bg-neutral-200";
   const [glass, setGlass] = useState("");
 
-  const [open, setIsOpen] = useState(false);
+  // const [open, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -46,16 +50,20 @@ const StockHeader = ({ ...props }) => {
         >
           <img src={logo} alt="app's logo" className="h-10 w-10" />
           <div className="mx-1" />
-          <Title>DOTQUIZ</Title>
+          <Title>LETSCARD</Title>
         </div>
-        <PrimaryButton
-          title="Créer un quiz"
-          onClick={(_) => {
-            setIsOpen(true);
-          }}
-        />
+        <div className="flex items-center">
+          <PrimaryButton
+            title="Sign in"
+            onClick={(_) => {}}
+            style={{
+              margin: "0 1rem",
+            }}
+          />
+          <PrimaryButton title="Start Playing now" onClick={(_) => {}} />
+        </div>
       </header>
-      <AddQuizModal open={open} setOpen={setIsOpen} />
+      {/* <AddQuizModal open={open} setOpen={setIsOpen} /> */}
     </>
   );
 };

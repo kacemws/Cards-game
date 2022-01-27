@@ -1,12 +1,3 @@
-/*
- --primary-100: #1d888a;
-  --primary-200: #197476;
-  --primary-300: #27666b;
-  --primary-400: #1b4647;
-  --primary-500: #173838;
-
-*/
-
 .header {
   display: flex;
   width: 100%;
@@ -21,11 +12,11 @@
   }
   button {
     background-color: #eaffff;
-    border: 2px solid #5eb3b8;
+    border: 2px solid #c2e1ff;
     transition: 150ms ease-in-out;
     color: #181818;
     &:hover {
-      background-color: #5eb3b8;
+      background-color: #99ccff;
     }
   }
 }

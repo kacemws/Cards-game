@@ -17,7 +17,7 @@ const ButtonLoader = ({ loading }) => {
 export const PrimaryButton = ({ title, disabled, loading, ...props }) => {
   const style = () => {
     let background =
-      "bg-primary-300 hover:bg-primary-200 active:bg-primary-400";
+      "bg-primary-500 hover:bg-primary-200 active:bg-primary-400";
     const focus = "focus:ring-2 focus:ring-primary-100 outline-none";
     return `${basicShape} ${background} ${focus}`;
   };
@@ -33,14 +33,14 @@ export const PrimaryButton = ({ title, disabled, loading, ...props }) => {
 export const OutlinedButton = ({ title, disabled, loading, ...props }) => {
   const style = () => {
     const focus = "focus:ring-2 focus:ring-primary-100 outline-none";
-    let background = "border border-primary-300 hover:bg-neutral-100";
+    let background = "border border-primary-500 hover:bg-neutral-100";
     return `${basicShape} ${background} ${focus}`;
   };
 
   return (
     <button className={style()} type="ghost" {...props}>
       <ButtonLoader loading={loading} />
-      <Title inverted color="text-primary-300">
+      <Title inverted color="text-primary-500">
         {title}
       </Title>
     </button>

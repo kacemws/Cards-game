@@ -1,19 +1,19 @@
 const defaultColors = require("tailwindcss/colors");
 const colors = {
   current: "currentColor",
-  primary: {
-    100: "#61E5C6",
-    200: "#2CDDB4",
-    300: "#1CAF8D",
-    400: "#178C71",
-    500: "#116955",
-  },
   secondary: {
-    100: "#FEE086",
-    200: "#FDD55D",
-    300: "#FDC627",
-    400: "#FDC10D",
-    500: "#F2B602",
+    100: "#D7ECFE",
+    200: "#CDE7FF",
+    300: "#C2E1FF",
+    400: "#ADD6FF",
+    500: "#99CCFF",
+  },
+  primary: {
+    100: "#EDE4F2",
+    200: "#E4D6EB",
+    300: "#DAC8E4",
+    400: "#D1BBDD",
+    500: "#C7AED6",
   },
   blackText: {
     100: "#181818",

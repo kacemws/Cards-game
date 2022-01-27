@@ -31,7 +31,9 @@ export const HomeDescription = ({
       <div className="my-6" />
       <Body>{description}</Body>
       <div className="my-6" />
-      <OutlinedButton title={buttonContent} onClick={buttonClick} />
+      {buttonContent && (
+        <OutlinedButton title={buttonContent} onClick={buttonClick} />
+      )}
     </motion.div>
   );
 };
