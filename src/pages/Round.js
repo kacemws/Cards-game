@@ -3,6 +3,7 @@ import { motion, useAnimation } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Deck,
+  WarDeck,
   Heading,
   Loader,
   NoContent,
@@ -31,8 +32,64 @@ export const Round = () => {
   const [cpu, setCpu] = useState(null);
   const [result, setResult] = useState("");
 
+  const [rps, setRps] = useState(false);
+
   const userControl = useAnimation();
   const cpuControl = useAnimation();
+
+  const onClick = async (value) => {
+    if (selected || innerLoading) return;
+    if (current === room?.number_of_rounds) {
+      return;
+    }
+    setInnerLoading(true);
+    const choice = game?.choices?.find(({ card }) => card === value);
+    setSelected(value);
+    userControl.start({
+      opacity: [0, 1],
+      scale: [0.75, 1],
+      y: [200, 0],
+      transition: {
+        duration: 0.75,
+        ease: [0.85, 0, 0.15, 1],
+      },
+    });
+    const { data } = await addRound(rps, id, { choice });
+    setRounds(data?.rounds?.sort((a, b) => a?.id - b?.id));
+
+    setCpu(data?.rounds[current].playerTwoChoice?.card);
+    if (current === data?.number_of_rounds - 1) {
+      let result = {
+        won: 0,
+        draw: 0,
+        lost: 0,
+      };
+      data?.rounds.forEach(({ result }) => {
+        if (result?.name === "DRAW") result.draw++;
+        else if (result?.name === "WIN") result.won++;
+        else result.lost++;
+      });
+      result = Object.keys(result).reduce((a, b) =>
+        result[a] > result[b] ? a : b
+      );
+      setResult((_) => {
+        return result === "won"
+          ? "YOU WON"
+          : result === "draw"
+          ? "NO ONE WON"
+          : "YOU LOST";
+      });
+    }
+    setInnerLoading(false); // to remove
+    cpuControl.start({
+      rotateY: [0, 180],
+      transition: {
+        delay: 0.5,
+        duration: 0.75,
+        ease: [0.85, 0, 0.15, 1],
+      },
+    });
+  };
 
   useEffect(() => {
     getRoom(id)
@@ -49,6 +106,9 @@ export const Round = () => {
         setDeck(deck);
         setHiddenDeck(hiddenDeck);
         if (room?.game?.status?.name !== "OPEN") throw Error("Not available");
+        if (room?.game?.name?.includes("Rock")) {
+          setRps(true);
+        }
         setGame(room?.game);
         let number_of_rounds = room?.rounds?.length;
         setCurrent(number_of_rounds === 0 ? 0 : number_of_rounds);
@@ -106,7 +166,11 @@ export const Round = () => {
               <div className="w-full flex-1  flex flex-col justify-between items-center">
                 {/* CPU's Deck */}
                 <div className="w-full h-1/3 flex flex-col items-center">
-                  <Deck choices={hiddenDeck} top />
+                  {rps ? (
+                    <Deck choices={hiddenDeck} top />
+                  ) : (
+                    <WarDeck choices={hiddenDeck} top />
+                  )}
                   <Heading>CPU</Heading>
                 </div>
                 {/* table */}
@@ -219,64 +283,11 @@ export const Round = () => {
                 {/* User's Deck */}
                 <div className="w-full h-1/3 flex flex-col items-center">
                   <Heading>YOU</Heading>
-                  <Deck
-                    choices={deck}
-                    onClick={async (value) => {
-                      if (selected || innerLoading) return;
-                      if (current === room?.number_of_rounds) {
-                        return;
-                      }
-                      setInnerLoading(true);
-                      const choice = game?.choices?.find(
-                        ({ card }) => card === value
-                      );
-                      setSelected(value);
-                      userControl.start({
-                        opacity: [0, 1],
-                        scale: [0.75, 1],
-                        y: [200, 0],
-                        transition: {
-                          duration: 0.75,
-                          ease: [0.85, 0, 0.15, 1],
-                        },
-                      });
-                      const { data } = await addRound(id, { choice });
-                      setRounds(data?.rounds?.sort((a, b) => a?.id - b?.id));
-
-                      setCpu(data?.rounds[current].playerTwoChoice?.card);
-                      if (current === data?.number_of_rounds - 1) {
-                        let result = {
-                          won: 0,
-                          draw: 0,
-                          lost: 0,
-                        };
-                        data?.rounds.forEach(({ result }) => {
-                          if (result?.name === "DRAW") result.draw++;
-                          else if (result?.name === "WIN") result.won++;
-                          else result.lost++;
-                        });
-                        result = Object.keys(result).reduce((a, b) =>
-                          result[a] > result[b] ? a : b
-                        );
-                        setResult((_) => {
-                          return result === "won"
-                            ? "YOU WON"
-                            : result === "draw"
-                            ? "NO ONE WON"
-                            : "YOU LOST";
-                        });
-                      }
-                      setInnerLoading(false); // to remove
-                      cpuControl.start({
-                        rotateY: [0, 180],
-                        transition: {
-                          delay: 0.5,
-                          duration: 0.75,
-                          ease: [0.85, 0, 0.15, 1],
-                        },
-                      });
-                    }}
-                  />
+                  {rps ? (
+                    <Deck choices={deck} onClick={onClick} />
+                  ) : (
+                    <WarDeck choices={deck} onClick={onClick} />
+                  )}
                 </div>
               </div>
             </div>

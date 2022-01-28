@@ -66,6 +66,7 @@ export const GameDecks = ({ choices, animate }) => {
               }}
               animate={{
                 zIndex: cards.length - index,
+                rotate: Math.floor(Math.random() * (5 + 5 + 1)) - 5,
               }}
               exit={{ opacity: 0, scale: 0.75 }}
               drag={canDrag}

@@ -23,3 +23,10 @@ export const postRPSRound = async (id, body) => {
     throw new Error(error?.response?.status);
   }
 };
+export const postWARRound = async (id, body) => {
+  try {
+    return await axios.post(`/rooms/${id}/add-round/war/`, body);
+  } catch (error) {
+    throw new Error(error?.response?.status);
+  }
+};

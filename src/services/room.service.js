@@ -1,4 +1,4 @@
-import { getRoomById, postRoom, postRPSRound } from "../api";
+import { getRoomById, postRoom, postRPSRound, postWARRound } from "../api";
 
 export const createRoom = async (data) => {
   try {
@@ -21,12 +21,13 @@ export const getRoom = async (id) => {
   }
 };
 
-export const addRound = async (id, data) => {
+export const addRound = async (rps, id, data) => {
   try {
     const body = {
       playerChoice: data?.choice,
     };
-    return await postRPSRound(id, body);
+    if (rps) return await postRPSRound(id, body);
+    else return await postWARRound(id, body);
   } catch (error) {
     throw new Error(error?.message);
   }
