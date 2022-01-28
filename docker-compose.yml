@@ -1,7 +1,7 @@
 version: "3"
 services:
-  dotnet-front:
-    container_name: dotnet-front
+  cards-front:
+    container_name: cards-front
     stdin_open: true
     tty: true
     build:

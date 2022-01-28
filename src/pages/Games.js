@@ -7,7 +7,6 @@ import {
   NoContent,
   GameCard,
   ChangeVisibility,
-  // UpdateQuizModal,
   OutlinedButton,
 } from "../Components";
 import { getAllGames, totalPages } from "../services";
@@ -21,7 +20,6 @@ export const Games = ({ ...props }) => {
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
 
-  // add quiz
   const [open, setOpen] = useState(false);
 
   const [selectedGame, setSelectedGame] = useState(null);
@@ -132,7 +130,6 @@ export const Games = ({ ...props }) => {
           setInnerLoading(false);
         }}
       />
-      {/* <UpdateQuizModal quiz={selectedQuiz} open={open} setOpen={setOpen} /> */}
     </>
   );
 };
