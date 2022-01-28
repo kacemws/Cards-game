@@ -21,6 +21,7 @@ export const GameDetails = () => {
   useEffect(() => {
     getGame(id)
       .then((resp) => {
+        if (resp?.status?.name !== "OPEN") throw Error("Not available");
         setGame(resp);
         setLoading(false);
       })

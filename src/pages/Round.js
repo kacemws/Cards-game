@@ -48,6 +48,7 @@ export const Round = () => {
         );
         setDeck(deck);
         setHiddenDeck(hiddenDeck);
+        if (room?.game?.status?.name !== "OPEN") throw Error("Not available");
         setGame(room?.game);
         let number_of_rounds = room?.rounds?.length;
         setCurrent(number_of_rounds === 0 ? 0 : number_of_rounds);

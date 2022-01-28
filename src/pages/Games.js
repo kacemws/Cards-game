@@ -82,7 +82,10 @@ export const Games = ({ ...props }) => {
                         list={false}
                         onClick={(_) => {
                           let roles = user?.roles?.map(({ name }) => name);
-                          if (roles?.includes("USER")) {
+                          if (
+                            roles?.includes("USER") &&
+                            !roles?.includes("ADMIN")
+                          ) {
                             navigate(`/games/all/${game?.id}`);
                           } else {
                             // open the change status modal
@@ -111,7 +114,24 @@ export const Games = ({ ...props }) => {
           )}
         </div>
       )}
-      <ChangeVisibility game={selectedGame} setOpen={setOpen} open={open} />
+      <ChangeVisibility
+        game={selectedGame}
+        setOpen={setOpen}
+        open={open}
+        finalFunc={async () => {
+          setInnerLoading(true);
+          const { games, count } = await getAllGames(0, 10);
+          setGames(
+            games.filter((game) => {
+              let roles = user?.roles?.map(({ name }) => name);
+              if (roles?.includes("ADMIN")) return true;
+              return game?.status?.name === "OPEN";
+            })
+          );
+          setCount(count);
+          setInnerLoading(false);
+        }}
+      />
       {/* <UpdateQuizModal quiz={selectedQuiz} open={open} setOpen={setOpen} /> */}
     </>
   );

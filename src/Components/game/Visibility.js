@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
-
-import { Modal, Loader, OutlinedButton } from "..";
+import { useAtom } from "jotai";
+import { userAtom } from "../../data";
+import { Modal, Loader, OutlinedButton, PrimaryButton } from "..";
 import { changeStatus } from "../../services";
+import { useNavigate } from "react-router-dom";
 
-const ConfirmChange = ({ close, game }) => {
+const ConfirmChange = ({ close, game, finalFunc }) => {
   const [loading, setLoading] = useState(false);
+  const [user] = useAtom(userAtom);
+  const navigate = useNavigate();
+
+  console.log({ user });
 
   return (
     <div className="h-28 w-full flex justify-end items-end">
@@ -19,17 +25,32 @@ const ConfirmChange = ({ close, game }) => {
             ...game,
             status: game?.status?.name,
           });
+          await finalFunc();
           setLoading(false);
           close();
         }}
       />
+      {user?.roles?.map(({ name }) => name).includes("USER") && (
+        <>
+          <div className="w-2" />
+          <PrimaryButton
+            title="Play the game"
+            type="primary"
+            disabled={loading}
+            loading={loading}
+            onClick={async (_) => {
+              navigate(`/games/all/${game?.id}`);
+            }}
+          />
+        </>
+      )}
     </div>
   );
 };
 
-export const ChangeVisibility = ({ open, setOpen, game }) => {
+export const ChangeVisibility = ({ open, setOpen, game, finalFunc }) => {
   const steps = {
-    1: <ConfirmChange close={setOpen} game={game} />,
+    1: <ConfirmChange close={setOpen} game={game} finalFunc={finalFunc} />,
   };
   const [loading, setLoading] = useState(true);
 

@@ -154,7 +154,7 @@ export const Users = ({ ...props }) => {
                             onClick={async (_) => {
                               setInnerLoading(true);
                               await manageBan(row?.id);
-                              await paginate(page);
+                              await paginate(page + 1);
                               setInnerLoading(false);
                             }}
                           />
@@ -176,7 +176,7 @@ export const Users = ({ ...props }) => {
           <AddUser
             open={open}
             setOpen={setOpen}
-            finalFunc={() => paginate(page)}
+            finalFunc={() => paginate(page + 1)}
           />
         </div>
       )}
