@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAtom } from "jotai";
+import { userAtom } from "../data";
 import {
   HomeDescription,
   HomeImage,
   Loader,
+  Login,
   OutlinedButton,
   PageTitle,
 } from "../Components";
@@ -17,7 +20,9 @@ import { InteractiveDeck } from "../Components/home/InteractiveDeck";
 
 export const Home = ({ ...props }) => {
   const navigate = useNavigate();
+  const [user] = useAtom(userAtom);
   const [loading, setLoading] = useState(true);
+  const [loginOpen, setLoginOpen] = useState(false);
   useEffect(() => {
     setLoading(false);
   }, []);
@@ -33,6 +38,11 @@ export const Home = ({ ...props }) => {
               title="Playing Cards was never this easy !"
               description="Multiple free and enjoyable games at the tips of your hand, what are you waiting for ?"
               buttonContent="Start Playing Now !"
+              buttonClick={() => {
+                let roles = user?.roles?.map(({ name }) => name);
+                if (roles?.includes("USER")) navigate("/games/all");
+                else setLoginOpen(true);
+              }}
               x={-200}
             />
             <HomeImage
@@ -71,10 +81,13 @@ export const Home = ({ ...props }) => {
             <OutlinedButton
               title="Discover our games"
               onClick={(_) => {
-                navigate("/games/all");
+                let roles = user?.roles?.map(({ name }) => name);
+                if (roles?.includes("USER")) navigate("/games/all");
+                else setLoginOpen(true);
               }}
             />
           </div>
+          <Login open={loginOpen} setOpen={setLoginOpen} />
         </div>
       )}
       )

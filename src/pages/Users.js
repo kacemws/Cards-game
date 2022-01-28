@@ -66,8 +66,8 @@ export const Users = ({ ...props }) => {
             <>
               <NoContent
                 title="Huuuummm !"
-                message="No user was"
-                highlight="found !"
+                message="Where did the users"
+                highlight="hide"
                 buttonTitle="Add one !"
                 clickEvent={(_) => {
                   setOpen(true);

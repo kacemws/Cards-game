@@ -33,10 +33,13 @@ instance.interceptors.response.use(
         if (res.status === 200) {
           localStorage.setItem("accessToken", res.data.accessToken);
           localStorage.setItem("refreshToken", res.data.refreshToken);
-
+          setAuthToken(res.data.accessToken);
           axios.defaults.headers.common["Authorization"] =
             "Bearer " + res.data.accessToken;
-
+          instance.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${res.data.accessToken}`;
+          originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
           return axios(originalRequest);
         }
       });

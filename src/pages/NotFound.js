@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { OutlinedButton, PageTitle } from "../Components";
-import illustration from "../assets/images/illustrations/404.svg";
+import illustration from "../assets/images/illustrations/404.png";
 const Wrapper = ({ children }) => {
   return <div className="my-4">{children}</div>;
 };
@@ -17,14 +17,14 @@ export const NotFound = () => {
         <PageTitle color="text-primary-300">Oooooops !</PageTitle>
         <Wrapper>
           <PageTitle>
-            Tu as perdu ton{" "}
-            <span className="text-primary-300 text-2xl">chemin</span> !
+            You got lost in this vast
+            <span className="text-primary-300 text-2xl"> universe </span> !
           </PageTitle>
         </Wrapper>
         <OutlinedButton
-          title="Revenir en arrière"
+          title="Go back to base"
           onClick={(_) => {
-            navigate(-1);
+            navigate("/");
           }}
         />
       </aside>

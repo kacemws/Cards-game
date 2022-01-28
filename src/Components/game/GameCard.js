@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heading } from "..";
 
-export const GameCard = ({ game }) => {
+export const GameCard = ({ game, onClick }) => {
   const [cards, setCards] = useState([
     ...game.choices.map((choice) => choice?.card),
     game?.image,
@@ -16,7 +16,7 @@ export const GameCard = ({ game }) => {
   };
 
   return (
-    <div>
+    <div onClick={onClick}>
       <motion.div
         className="z-20 h-96 relative flex flex-col items-center justify-center"
         initial={{

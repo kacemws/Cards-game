@@ -1,4 +1,4 @@
-import { getGames } from "../api";
+import { getGames, putGame } from "../api";
 
 // export const updateQuiz = async (data, setQuizzes) => {
 //   try {
@@ -61,6 +61,21 @@ export const getAllGames = async (page = 0, size = 10) => {
         count: 0,
       }
     );
+  } catch (error) {
+    throw new Error(error?.message);
+  }
+};
+
+export const changeStatus = async (data) => {
+  try {
+    const body = {
+      description: data?.description,
+      id: data?.id,
+      image: data?.image,
+      name: data?.name,
+      status: data?.status === "OPEN" ? "CLOSED" : "OPEN",
+    };
+    return await putGame(data?.id, body);
   } catch (error) {
     throw new Error(error?.message);
   }

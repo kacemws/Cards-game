@@ -22,12 +22,14 @@ export const NoContent = ({
           </PageTitle>
         </Wrapper>
         <div className="w-fit">
-          <OutlinedButton
-            title={buttonTitle}
-            onClick={(_) => {
-              clickEvent();
-            }}
-          />
+          {buttonTitle && (
+            <OutlinedButton
+              title={buttonTitle}
+              onClick={(_) => {
+                clickEvent();
+              }}
+            />
+          )}
         </div>
       </aside>
     </div>
