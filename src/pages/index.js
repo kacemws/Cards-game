@@ -4,4 +4,5 @@ export { NotFound } from "./NotFound";
 export { Games } from "./Games";
 export { GameDetails } from "./GameDetails";
 export { Round } from "./Round";
+export { Profile } from "./Profile";
 export * from "./Users";

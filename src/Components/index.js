@@ -5,3 +5,4 @@ export * from "./auth";
 export * from "./game";
 export * from "./room";
 export * from "./users";
+export * from "./Profile";

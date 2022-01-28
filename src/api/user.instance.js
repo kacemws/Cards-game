@@ -31,3 +31,11 @@ export const postBan = async (id) => {
     throw new Error(error?.response?.data);
   }
 };
+
+export const putUser = async (data) => {
+  try {
+    return await axios.put(`/users/`, data);
+  } catch (error) {
+    throw new Error(error?.response?.data);
+  }
+};

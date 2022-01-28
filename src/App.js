@@ -16,6 +16,7 @@ import {
   NotFound,
   GameDetails,
   Round,
+  Profile,
 } from "./pages";
 import { setAuthToken } from "./api";
 import { Loader } from "./Components";
@@ -69,7 +70,7 @@ function App() {
                 path="/profile"
                 element={
                   ![null, undefined, "", "no token"].includes(token) ? (
-                    <Games />
+                    <Profile />
                   ) : (
                     <Navigate to="/" />
                   )
