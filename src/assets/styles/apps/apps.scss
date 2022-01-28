@@ -30,3 +30,7 @@
     width: 100%;
   }
 }
+.backface {
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}

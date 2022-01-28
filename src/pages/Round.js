@@ -3,13 +3,11 @@ import { motion, useAnimation } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Deck,
-  //   Body,
   Heading,
   Loader,
   NoContent,
   Progress,
   //   OutlinedButton,
-  //   PageTitle,
 } from "../Components";
 import { getRoom } from "../services";
 
@@ -30,6 +28,7 @@ export const Round = () => {
   const [selected, setSelected] = useState(null);
 
   const userControl = useAnimation();
+  const cpuControl = useAnimation();
 
   useEffect(() => {
     getRoom(id)
@@ -55,6 +54,22 @@ export const Round = () => {
     return () => {};
   }, [id]);
 
+  const cpuCards = (hidden, card) => {
+    return (
+      <div
+        className="backface shadow absolute rounded-lg border bg-gray-50 border-gray-300"
+        style={{
+          height: "250px",
+          width: "180px",
+          backgroundImage: `url("${card}")`,
+          backgroundSize: "180px 250px",
+          backgroundRepeat: "no-repeat",
+          transform: `${hidden && "rotateY(180deg)"}`,
+        }}
+      />
+    );
+  };
+
   return (
     <>
       {loading ? (
@@ -77,36 +92,53 @@ export const Round = () => {
             <div className="h-full flex flex-col items-center">
               <Progress current={current} total={room?.number_of_rounds} />
               <div className="w-full flex-1  flex flex-col justify-between">
+                {/* CPU's Deck */}
                 <div className="w-full h-1/3 flex flex-col items-center">
                   <Deck choices={hiddenDeck} top />
                   <Heading>CPU</Heading>
                 </div>
+                {/* table */}
                 <div className="flex-1 w-full my-4 flex items-center justify-evenly">
+                  {/* CPU's selected card */}
                   <motion.div
-                    className="mx-2 shadow relative cursor-pointer rounded-lg border bg-gray-50 border-gray-300"
+                    className="mx-2 relative"
                     style={{
                       height: "250px",
                       width: "180px",
-                      backgroundImage: `url("${selected}")`,
-                      backgroundSize: "180px 250px",
-                      backgroundRepeat: "no-repeat",
+                      transformStyle: "preserve-3d",
                     }}
                     initial={{
                       rotate: 180,
                     }}
-                  />
-                  <motion.div
-                    className="mx-2 shadow relative cursor-pointer rounded-lg border bg-gray-50 border-gray-300"
+                    animate={cpuControl}
+                  >
+                    {/* hidden card */}
+                    {cpuCards(false, hiddenDeck[0])}
+                    {/* displayed card */}
+                    {cpuCards(true, selected)}
+                  </motion.div>
+                  {/* User's selected card */}
+                  <div
                     style={{
                       height: "250px",
                       width: "180px",
-                      backgroundImage: `url("${selected}")`,
-                      backgroundSize: "180px 250px",
-                      backgroundRepeat: "no-repeat",
                     }}
-                    animate={userControl}
-                  />
+                    className="mx-2 rounded-lg border bg-gray-200 border-gray-300"
+                  >
+                    <motion.div
+                      className="shadow relative rounded-lg border border-gray-300"
+                      style={{
+                        height: "250px",
+                        width: "180px",
+                        backgroundImage: `url("${selected}")`,
+                        backgroundSize: "180px 250px",
+                        backgroundRepeat: "no-repeat",
+                      }}
+                      animate={userControl}
+                    />
+                  </div>
                 </div>
+                {/* User's Deck */}
                 <div className="w-full h-1/3 flex flex-col items-center">
                   <Heading>YOU</Heading>
                   <Deck
@@ -115,16 +147,20 @@ export const Round = () => {
                       setSelected(value);
                       userControl
                         .start({
-                          rotate: 0,
-                          transform: {
-                            duration: 1,
+                          opacity: [0, 1],
+                          scale: [0.75, 1],
+                          y: [200, 0],
+                          transition: {
+                            duration: 0.75,
+                            ease: [0.85, 0, 0.15, 1],
                           },
                         })
-                        .then(() => {
-                          userControl.start({
-                            rotate: 360,
-                            transform: {
-                              duration: 1,
+                        .then((_) => {
+                          cpuControl.start({
+                            rotateY: [0, 180],
+                            transition: {
+                              duration: 0.75,
+                              ease: [0.85, 0, 0.15, 1],
                             },
                           });
                         });
