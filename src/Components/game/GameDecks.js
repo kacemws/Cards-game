@@ -1,40 +1,54 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const CARD_COLORS = [
-  "https://numerologist.com/wp-content/uploads/2014/12/08-strength-1.jpg",
-  "https://i.pinimg.com/originals/04/b9/86/04b9861aa7d2583c0d864c20b69cb4ca.png",
-  "https://vivre-intuitif.com/wp-content/uploads/2017/10/AE-Waite-Standard-FR8.jpg",
-  "https://i.pinimg.com/originals/d4/d3/9f/d4d39f273440ac7e174869dd949e1c8f.jpg",
-  "https://images.squarespace-cdn.com/content/v1/560fddf5e4b0e5d9aa30ce52/1462017024480-TN0LFYB4TATCRWWW3LWM/II_The-High-Priestess003.jpg?format=1500w",
-  "https://numerologist.com/wp-content/uploads/2014/07/magician2-2-736x1189.jpg",
-];
-
-export const InteractiveDeck = ({ x = 0, y = 0 }) => {
-  const [cards, setCards] = useState(CARD_COLORS);
-  const moveToEnd = (from) => {
+export const GameDecks = ({ choices, animate }) => {
+  const [cards, setCards] = useState([...choices]);
+  const moveToEnd = () => {
+    if (cards.length === 1) return;
     const aux = [...cards];
-    aux.shift();
-
+    let item = aux.shift();
+    aux.push(item);
     setCards(aux);
   };
-
+  const initial = animate && {
+    opacity: 0,
+    scale: 0.95,
+    y: 50,
+    rotate: 360,
+  };
+  const whileInView = animate && {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    rotate: 0,
+    transition: {
+      duration: 1,
+      type: "spring",
+      ease: [0.85, 0, 0.15, 1],
+      scale: {
+        type: "spring",
+        damping: 1,
+      },
+    },
+  };
   return (
     <motion.div
-      className="z-20 w-1/2 h-96 relative flex items-center justify-center"
+      className="z-20 h-96 relative flex flex-col items-center justify-center"
       initial={{
         opacity: 0,
-        x,
-        y,
+        scale: 0.5,
+        y: 50,
+        ...initial,
       }}
       whileInView={{
         opacity: 1,
-        x: 0,
+        scale: 1,
         y: 0,
         transition: {
           duration: 1,
           ease: [0.85, 0, 0.15, 1],
         },
+        ...whileInView,
       }}
     >
       {cards.map((card, index) => {
@@ -51,14 +65,15 @@ export const InteractiveDeck = ({ x = 0, y = 0 }) => {
                 cursor: canDrag ? "grab" : "auto",
               }}
               animate={{
-                zIndex: CARD_COLORS.length - index,
-                rotate: Math.floor(Math.random() * (5 + 5 + 1)) - 5,
+                zIndex: cards.length - index,
               }}
               exit={{ opacity: 0, scale: 0.75 }}
               drag={canDrag}
               dragConstraints={{
                 top: 0,
+                right: 0,
                 bottom: 0,
+                left: 0,
               }}
               whileTap={{
                 rotate: 0,
@@ -68,7 +83,8 @@ export const InteractiveDeck = ({ x = 0, y = 0 }) => {
                 className: "shadow-none",
                 rotate: 0,
               }}
-              dragElastic={0.5}
+              dragElastic={0.25}
+              dragSnapToOrigin
               onDragEnd={() => moveToEnd(index)}
             />
           </AnimatePresence>
@@ -81,5 +97,5 @@ export const InteractiveDeck = ({ x = 0, y = 0 }) => {
 const cardStyle = {
   width: "225px",
   height: "320px",
-  transformOrigin: "top center",
+  // transformOrigin: "top center",
 };

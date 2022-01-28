@@ -22,7 +22,6 @@ const LoginInner = ({ setOpen, setLoading, loading }) => {
           if (loading) return;
           setLoading(true);
           const aux = { ...formData };
-          console.log({ aux });
           const { data } = await signin(aux);
           if (data?.banned) {
             throw Error("You have been banned");

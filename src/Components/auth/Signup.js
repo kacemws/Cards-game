@@ -32,7 +32,6 @@ const SignupInner = ({ setOpen, setLoading, loading }) => {
             },
             role: ["USER"],
           };
-          console.log({ aux });
 
           const { data } = await signup(aux);
           setUser(data);

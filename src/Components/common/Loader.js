@@ -8,7 +8,7 @@ export const Loader = ({ fullScreen = false, bg = true }) => {
       } flex items-center justify-center ${dimensions}`}
     >
       <svg
-        className={`animate-spin -ml-1 mr-3 ${circle} text-primary-300`}
+        className={`animate-spin ${circle} text-primary-300`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

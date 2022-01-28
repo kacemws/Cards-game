@@ -15,9 +15,7 @@ export const createUser = async (data) => {
 
   try {
     const res = await postUser(mydata);
-    console.log({ res });
     if (res?.status === 400) {
-      console.log("yeah?");
       throw Error("Email already exists");
     } else if (res?.status === 201) {
       return await getAllUsers();
@@ -30,7 +28,6 @@ export const createUser = async (data) => {
 export const getAllUsers = async (page = 0, size = 10) => {
   try {
     const { data: resp } = await getUsers(page, size);
-    console.log({ resp });
     return (
       resp || {
         users: [],

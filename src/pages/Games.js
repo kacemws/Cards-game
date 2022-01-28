@@ -28,7 +28,6 @@ export const Games = ({ ...props }) => {
 
   useEffect(() => {
     getAllGames(0, 10).then(({ games, count }) => {
-      console.log({ games, count });
       setGames(
         games.filter((game) => {
           let roles = user?.roles?.map(({ name }) => name);
@@ -82,9 +81,7 @@ export const Games = ({ ...props }) => {
                         game={game}
                         list={false}
                         onClick={(_) => {
-                          console.log({ game, user });
                           let roles = user?.roles?.map(({ name }) => name);
-                          console.log({ roles });
                           if (roles?.includes("USER")) {
                             navigate(`/games/all/${game?.id}`);
                           } else {

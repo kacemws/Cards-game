@@ -8,7 +8,15 @@ import {
 import { useAtom } from "jotai";
 import { userAtom } from "./data";
 import { verifyCookie } from "./services";
-import { Layout, Home, Games, Users, NotFound } from "./pages";
+import {
+  Layout,
+  Home,
+  Games,
+  Users,
+  NotFound,
+  GameDetails,
+  Round,
+} from "./pages";
 import { setAuthToken } from "./api";
 import { Loader } from "./Components";
 function App() {
@@ -103,7 +111,7 @@ function App() {
                 element={
                   ![null, undefined, "", "no token"].includes(token) &&
                   roles.includes("USER") ? (
-                    <Games />
+                    <GameDetails />
                   ) : (
                     <Navigate to="/games/all" />
                   )
@@ -113,11 +121,11 @@ function App() {
               {/* game room for people who are users */}
 
               <Route
-                path="/games/all/:id/play/:id"
+                path="/games/all/:gameid/play/:id"
                 element={
                   ![null, undefined, "", "no token"].includes(token) &&
                   roles.includes("USER") ? (
-                    <Games />
+                    <Round />
                   ) : (
                     <Navigate to="/games/all" />
                   )
