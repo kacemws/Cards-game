@@ -30,6 +30,8 @@ function App() {
   const [roles, setRoles] = useState([]);
 
   useEffect(() => {
+    const auxTok = localStorage.getItem("accessToken");
+    setToken(auxTok);
     setRoles(user?.roles?.map(({ name }) => name) ?? []);
   }, [user]);
 
