@@ -7,25 +7,29 @@ import {
   Loader,
   NoContent,
   Progress,
-  //   OutlinedButton,
+  OutlinedButton,
 } from "../Components";
-import { getRoom } from "../services";
+import { addRound, getRoom } from "../services";
 
 export const Round = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
+  const [innerLoading, setInnerLoading] = useState(false);
 
   const [game, setGame] = useState(null);
   const [room, setRoom] = useState(null);
+  const [rounds, setRounds] = useState([]);
 
-  const [current] = useState(0);
+  const [current, setCurrent] = useState(0);
 
   const [deck, setDeck] = useState([]);
   const [hiddenDeck, setHiddenDeck] = useState([]);
 
   const [selected, setSelected] = useState(null);
+  const [cpu, setCpu] = useState(null);
+  const [result, setResult] = useState("");
 
   const userControl = useAnimation();
   const cpuControl = useAnimation();
@@ -45,6 +49,9 @@ export const Round = () => {
         setDeck(deck);
         setHiddenDeck(hiddenDeck);
         setGame(room?.game);
+        let number_of_rounds = room?.rounds?.length;
+        setCurrent(number_of_rounds === 0 ? 0 : number_of_rounds);
+        setRounds(room?.rounds?.sort((a, b) => a?.id - b?.id));
         setRoom(room);
         setLoading(false);
       })
@@ -90,8 +97,12 @@ export const Round = () => {
             </>
           ) : (
             <div className="h-full flex flex-col items-center">
-              <Progress current={current} total={room?.number_of_rounds} />
-              <div className="w-full flex-1  flex flex-col justify-between">
+              <Progress
+                current={current}
+                total={room?.number_of_rounds}
+                played={rounds}
+              />
+              <div className="w-full flex-1  flex flex-col justify-between items-center">
                 {/* CPU's Deck */}
                 <div className="w-full h-1/3 flex flex-col items-center">
                   <Deck choices={hiddenDeck} top />
@@ -115,8 +126,74 @@ export const Round = () => {
                     {/* hidden card */}
                     {cpuCards(false, hiddenDeck[0])}
                     {/* displayed card */}
-                    {cpuCards(true, selected)}
+                    {cpuCards(true, cpu)}
                   </motion.div>
+
+                  {/* Advance */}
+                  <div className="flex flex-col justify-center items-center">
+                    <OutlinedButton
+                      title={
+                        current < room?.number_of_rounds - 1
+                          ? "Next Round"
+                          : "Go Back Home"
+                      }
+                      loading={innerLoading}
+                      onClick={() => {
+                        if (innerLoading) return;
+                        if (current > room?.number_of_rounds - 1) navigate("/");
+                        else if (
+                          current === room?.number_of_rounds - 1 &&
+                          ![null, undefined, ""].includes(cpu)
+                        ) {
+                          navigate("/");
+                        } else {
+                          if (
+                            [null, undefined, ""].includes(cpu) ||
+                            [null, undefined, ""].includes(selected)
+                          )
+                            return;
+
+                          userControl
+                            .start({
+                              opacity: [1, 0],
+                              scale: [1, 0.75],
+                              y: [0, 200],
+                              transition: {
+                                duration: 0.75,
+                                ease: [0.85, 0, 0.15, 1],
+                              },
+                            })
+                            .then((_) => {
+                              setSelected(null);
+                            });
+                          cpuControl
+                            .start({
+                              rotateY: [180, 0],
+                              transition: {
+                                delay: 0.5,
+                                duration: 0.75,
+                                ease: [0.85, 0, 0.15, 1],
+                              },
+                            })
+                            .then(() => {
+                              setCpu(null);
+                              setCurrent((current) => {
+                                let aux = current + 1;
+                                console.log({ aux });
+                                return aux;
+                              });
+                            });
+                        }
+                      }}
+                    />
+                    {result && (
+                      <>
+                        <div className="h-4" />
+                        <Heading>{result}</Heading>
+                      </>
+                    )}
+                  </div>
+
                   {/* User's selected card */}
                   <div
                     style={{
@@ -143,27 +220,60 @@ export const Round = () => {
                   <Heading>YOU</Heading>
                   <Deck
                     choices={deck}
-                    onClick={(value) => {
+                    onClick={async (value) => {
+                      if (selected || innerLoading) return;
+                      if (current === room?.number_of_rounds) {
+                        return;
+                      }
+                      setInnerLoading(true);
+                      const choice = game?.choices?.find(
+                        ({ card }) => card === value
+                      );
                       setSelected(value);
-                      userControl
-                        .start({
-                          opacity: [0, 1],
-                          scale: [0.75, 1],
-                          y: [200, 0],
-                          transition: {
-                            duration: 0.75,
-                            ease: [0.85, 0, 0.15, 1],
-                          },
-                        })
-                        .then((_) => {
-                          cpuControl.start({
-                            rotateY: [0, 180],
-                            transition: {
-                              duration: 0.75,
-                              ease: [0.85, 0, 0.15, 1],
-                            },
-                          });
+                      userControl.start({
+                        opacity: [0, 1],
+                        scale: [0.75, 1],
+                        y: [200, 0],
+                        transition: {
+                          duration: 0.75,
+                          ease: [0.85, 0, 0.15, 1],
+                        },
+                      });
+                      const { data } = await addRound(id, { choice });
+                      setRounds(data?.rounds?.sort((a, b) => a?.id - b?.id));
+
+                      setCpu(data?.rounds[current].playerTwoChoice?.card);
+                      if (current === data?.number_of_rounds - 1) {
+                        let result = {
+                          won: 0,
+                          draw: 0,
+                          lost: 0,
+                        };
+                        data?.rounds.forEach(({ result }) => {
+                          if (result?.name === "DRAW") result.draw++;
+                          else if (result?.name === "WIN") result.won++;
+                          else result.lost++;
                         });
+                        result = Object.keys(result).reduce((a, b) =>
+                          result[a] > result[b] ? a : b
+                        );
+                        setResult((_) => {
+                          return result === "won"
+                            ? "YOU WON"
+                            : result === "draw"
+                            ? "NO ONE WON"
+                            : "YOU LOST";
+                        });
+                      }
+                      setInnerLoading(false); // to remove
+                      cpuControl.start({
+                        rotateY: [0, 180],
+                        transition: {
+                          delay: 0.5,
+                          duration: 0.75,
+                          ease: [0.85, 0, 0.15, 1],
+                        },
+                      });
                     }}
                   />
                 </div>

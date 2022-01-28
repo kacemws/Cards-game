@@ -9,7 +9,6 @@ export const GameCard = ({ game, onClick }) => {
   ]);
   const moveToEnd = (from) => {
     if (cards.length === 1) return;
-    console.log({ cards });
     const aux = [...cards];
     aux.shift();
     setCards(aux);

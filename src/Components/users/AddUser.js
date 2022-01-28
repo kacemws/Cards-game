@@ -45,7 +45,6 @@ const AddUserInner = ({ setOpen, setLoading, loading, finalFunc }) => {
             },
             role,
           };
-          console.log({ aux });
           await createUser(aux);
           finalFunc();
           setOpen(false);

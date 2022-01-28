@@ -2,7 +2,6 @@ import React from "react";
 import { Body, Checkbox, Input, PageTitle } from "..";
 
 export const Step = ({ register, errors = {}, question, disabled }) => {
-  console.log({ question });
   return (
     <>
       <PageTitle>{question?.content}</PageTitle>

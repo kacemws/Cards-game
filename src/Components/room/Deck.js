@@ -22,7 +22,7 @@ export const Deck = ({ choices, top = false, onClick = () => {} }) => {
     >
       {cards.map((card, index) => {
         return (
-          <AnimatePresence key={card} exitBeforeEnter>
+          <AnimatePresence key={card + index} exitBeforeEnter>
             <motion.div
               onClick={() => onClick(card)}
               className="mx-2 shadow relative cursor-pointer rounded-lg border border-gray-300"

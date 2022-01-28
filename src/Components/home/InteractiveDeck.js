@@ -13,7 +13,6 @@ const CARD_COLORS = [
 export const InteractiveDeck = ({ x = 0, y = 0 }) => {
   const [cards, setCards] = useState(CARD_COLORS);
   const moveToEnd = (from) => {
-    console.log({ cards });
     const aux = [...cards];
     aux.shift();
 
